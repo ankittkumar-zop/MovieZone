@@ -69,7 +69,7 @@ dependencies {
     kapt (libs.compiler)
     implementation (libs.picasso)
 
-
+    implementation(libs.androidx.appcompat.v160beta01)
 }
 
 kapt {

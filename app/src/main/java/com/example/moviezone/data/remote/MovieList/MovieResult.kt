@@ -12,3 +12,4 @@ data class MovieResult(
     @SerializedName("total_results")
     val totalResults: Int?
 )
+

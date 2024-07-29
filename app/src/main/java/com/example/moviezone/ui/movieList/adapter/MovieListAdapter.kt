@@ -1,6 +1,5 @@
 package com.example.moviezone.ui.movieList.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,20 +10,20 @@ import com.example.moviezone.data.remote.MovieList.MovieListData
 import com.squareup.picasso.Picasso
 
 class MovieListAdapter(
-    private var movies: List<MovieListData>,
+    private val moreMovies: () -> Unit
 ) : RecyclerView.Adapter<MovieListAdapter.MovieViewHolder>() {
+    private var movies: List<MovieListData> = listOf()
 
     class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val itemPosterImageView: ImageView = view.findViewById(R.id.ivMovieView)
-        fun bind(movie : MovieListData){
+        fun setMovie(movie: MovieListData) {
             Picasso.get().load("https://image.tmdb.org/t/p/w500${movie.posterUrl}")
                 .into(itemPosterImageView)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_movie, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
         return MovieViewHolder(view)
     }
 
@@ -34,7 +33,13 @@ class MovieListAdapter(
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val movie = movies[position]
-        holder.bind(movie)
+        holder.setMovie(movie)
+        if (position == movies.size - 3) moreMovies()
+    }
+
+    fun updateList(newMovies: List<MovieListData>) {
+        movies = newMovies
+        notifyDataSetChanged()
     }
 }
 

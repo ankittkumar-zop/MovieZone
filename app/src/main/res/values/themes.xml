@@ -7,7 +7,7 @@
 
     <style name="Theme.MovieZone" parent="Base.Theme.MovieZone" />
 
-    <style name="Theme.AppCompat.SplashScreen" parent="Theme.SplashScreen">
+    <style name="SplashTheme" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/white</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/logomoviezone</item>
         <item name="postSplashScreenTheme">@style/Base.Theme.MovieZone</item>
