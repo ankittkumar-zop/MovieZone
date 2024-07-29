@@ -1,5 +1,6 @@
 package com.example.moviezone.ui.movieList
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,23 +14,31 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieListViewModel @Inject constructor(private val movieRepo : MovieListRepo): ViewModel() {
+class MovieListViewModel @Inject constructor(private val movieRepo: MovieListRepo) : ViewModel() {
 
-    private val _popularMovies= MutableLiveData<List<MovieListData>>()
-    val popularMovies: LiveData<List<MovieListData>> get() = _popularMovies
+    private val _popularMovies = MutableLiveData<Resource<List<MovieListData>>>()
+    val popularMovies: LiveData<Resource<List<MovieListData>>> get() = _popularMovies
 
-    private val _topRatedMovies= MutableLiveData<List<MovieListData>>()
-    val topRatedMovies: LiveData<List<MovieListData>> get() = _topRatedMovies
+    private val _topRatedMovies = MutableLiveData<Resource<List<MovieListData>>>()
+    val topRatedMovies: LiveData<Resource<List<MovieListData>>> get() = _topRatedMovies
 
-    fun fetchPopularMovies(apikey: String , page : Int ){
-        viewModelScope.launch {
-            _popularMovies.postValue(movieRepo.getPopularMovies(apikey, page).results)
+    fun fetchPopularMovies(apikey: String, page: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _popularMovies.postValue(Resource.Loading())
+            val result = movieRepo.getPopularMovies(apikey, page)
+            if (result is Resource.Success) {
+                _popularMovies.postValue(Resource.Success(result.data?.results ?: emptyList()))
+            }
         }
     }
 
-    fun fetchTopRatedMovies(apikey: String , page : Int ){
-        viewModelScope.launch{
-            _topRatedMovies.postValue(movieRepo.getTopRatedMovies(apikey, page).results)
+    fun fetchTopRatedMovies(apikey: String, page: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _popularMovies.postValue(Resource.Loading())
+            val result = movieRepo.getPopularMovies(apikey, page)
+            if (result is Resource.Success) {
+                _popularMovies.postValue(Resource.Success(result.data?.results ?: emptyList()))
+            }
         }
     }
 }

@@ -6,9 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviezone.R
+import com.example.moviezone.data.Resource
 import com.example.moviezone.ui.movieList.adapter.MovieListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,27 +28,49 @@ class MovieListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerViewLoadMovie)
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = GridLayoutManager(context, 2)
 
         val apiKey = "78485b82b46c3312b295e2d81f160230"
-        val page =1
+        val page = 1
 
         movieListViewModel.fetchPopularMovies(apiKey, page)
         movieListViewModel.fetchTopRatedMovies(apiKey, page)
 
-        movieListViewModel.popularMovies.observe(viewLifecycleOwner){ movies->
-            popularAdapter = MovieListAdapter(movies)
-            recyclerView.adapter = popularAdapter
+        movieListViewModel.popularMovies.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    popularAdapter = MovieListAdapter(resource.data!!)
+                    recyclerView.adapter = popularAdapter
+                }
+
+                is Resource.Loading -> {
+
+                }
+
+                is Resource.Error -> {
+
+                }
+            }
+
         }
 
-        movieListViewModel.topRatedMovies.observe(viewLifecycleOwner){ movies->
-            topRatedAdapter = MovieListAdapter(movies)
-            recyclerView.adapter = topRatedAdapter
+        movieListViewModel.topRatedMovies.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    topRatedAdapter = MovieListAdapter(resource.data!!)
+                    recyclerView.adapter = topRatedAdapter
+                }
+
+                is Resource.Loading -> {
+
+                }
+
+                is Resource.Error -> {
+
+                }
+            }
         }
 
     }
-
-
 }

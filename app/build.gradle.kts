@@ -67,6 +67,7 @@ dependencies {
 
     implementation (libs.glide)
     kapt (libs.compiler)
+    implementation (libs.picasso)
 
 
 }

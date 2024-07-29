@@ -8,9 +8,6 @@ import androidx.fragment.app.Fragment
 import com.example.moviezone.R
 import com.example.moviezone.ui.movieList.MovieListFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
