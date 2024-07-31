@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviezone.data.Resource
-import com.example.moviezone.data.remote.MovieList.MovieListData
+import com.example.moviezone.data.remote.movieListt.MovieListData
 import com.example.moviezone.repo.MovieListRepo
 import com.example.moviezone.ui.MainActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,8 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieListViewModel @Inject constructor(private val movieRepo: MovieListRepo) : ViewModel() {
 
-    private val _movies = MutableLiveData<Resource<List<MovieListData>>>()
-    val movies: LiveData<Resource<List<MovieListData>>> get() = _movies
+    private val _movies = MutableLiveData<Resource<List<MovieListData?>>>()
+    val movies: LiveData<Resource<List<MovieListData?>>> get() = _movies
 
     private var currentPage = 1
     private var totalPages = 1
