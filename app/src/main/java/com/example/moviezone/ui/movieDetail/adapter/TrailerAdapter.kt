@@ -19,8 +19,12 @@ class TrailerAdapter(
         private val trailerImage: ImageView = view.findViewById(R.id.ivTrailerThumbnail)
 
         fun bind(trailer: MovieTrailerData){
-            Picasso.get().load("https://image.tmdb.org/t/p/w500/${trailer.key}.jpg").into(trailerImage)
-            
+            if(trailer.key != null){
+                Picasso.get().load("https://img.youtube.com/vi/${trailer.key}/0.jpg").into(trailerImage)
+
+            }else{
+                trailerImage.setImageResource(R.drawable.movie_missing)
+            }
             itemView.setOnClickListener{
                 if(trailer.key?.isNotBlank() == true){
                     onTrailerClick(trailer.key)

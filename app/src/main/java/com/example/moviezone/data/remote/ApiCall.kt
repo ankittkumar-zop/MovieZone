@@ -19,12 +19,12 @@ interface ApiCall {
         @Query("page") page: Int,
     ): Response<MovieResult>
 
-    @GET("movie/{id}")
+    @GET("{id}")
     suspend fun getMovieDetails(@Path("id") movieId: Int, @Query("api_key") apiKey: String): Response<MovieListData>
 
-    @GET("movie/{id}/videos")
+    @GET("{id}/videos")
     suspend fun getMovieTrailer(@Path("id") movieId: Int,@Query("api_key") apiKey: String): Response<MovieTrailerResult>
 
-    @GET("movie/{id}/reviews")
+    @GET("{id}/reviews")
     suspend fun getMovieReview(@Path("id") movieId: Int, @Query("api_key") apiKey: String): Response<MovieReviewResult>
 }

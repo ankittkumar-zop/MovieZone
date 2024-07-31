@@ -28,26 +28,28 @@ class MovieDetailViewModel @Inject constructor(private val movieDetailRepo: Movi
     val movieDetails: LiveData<MovieListData?> get() = _movieDetails
 
     private val _trailers = MutableLiveData<List<MovieTrailerData?>>()
-    val trailers: MutableLiveData<List<MovieTrailerData?>> get() = _trailers
+    val trailers: LiveData<List<MovieTrailerData?>> get() = _trailers
 
     private val _reviews = MutableLiveData<List<MovieReviewData?>>()
-    val reviews: MutableLiveData<List<MovieReviewData?>> get() = _reviews
+    val reviews: LiveData<List<MovieReviewData?>> get() = _reviews
 
     private suspend fun fetchDetail(movieId: Int) {
         viewModelScope.launch {
-            val response = movieDetailRepo.getDetail(movieId)
-            when(response){
-                is Resource.Error -> {
-                    Log.d("debug" , "error in api")
-                }
-                is Resource.Loading -> {
-                    Log.d("debug" , "loading in api")
+            withContext(Dispatchers.IO){
+                val response = movieDetailRepo.getDetail(movieId)
+                when(response){
+                    is Resource.Error -> {
+                        Log.d("debug" , "error in api")
+                    }
+                    is Resource.Loading -> {
+                        Log.d("debug" , "loading in api")
 
-                }
-                is Resource.Success -> {
-                    Log.d("debug" , "success in api")
+                    }
+                    is Resource.Success -> {
+                        Log.d("debug" , "success in api")
 
-                    _movieDetails.postValue(response.data)
+                        _movieDetails.postValue(response.data)
+                    }
                 }
             }
         }

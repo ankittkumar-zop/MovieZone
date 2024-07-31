@@ -20,6 +20,8 @@ class MovieListAdapter(
             if (movie != null) {
                 Picasso.get().load("https://image.tmdb.org/t/p/w500${movie.posterUrl}")
                     .into(itemPosterImageView)
+            }else{
+                itemPosterImageView.setImageResource(R.drawable.poster_missing)
             }
 
             itemView.setOnClickListener {
