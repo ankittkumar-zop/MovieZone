@@ -1,10 +1,13 @@
 package com.example.moviezone.ui.movieList
 
+import android.media.Image
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,10 +15,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviezone.R
 import com.example.moviezone.data.Resource
+import com.example.moviezone.ui.movieDetail.MovieDetailFragment
 import com.example.moviezone.ui.movieList.adapter.MovieListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
-const val apiKey ="78485b82b46c3312b295e2d81f160230"
+const val apiKey = "78485b82b46c3312b295e2d81f160230"
 
 @AndroidEntryPoint
 class MovieListFragment : Fragment() {
@@ -32,13 +36,23 @@ class MovieListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val progressBar: ProgressBar = view.findViewById(R.id.progressBar)
+
         recyclerView = view.findViewById(R.id.recyclerViewLoadMovie)
-        val progressBar: ProgressBar= view.findViewById(R.id.progressBar)
-        movieAdapter = MovieListAdapter {
-            movieListViewModel.moreMovies()
-        }
+        movieAdapter = MovieListAdapter(onMovieClick = { movie ->
+            val bundle = Bundle().apply {
+                putInt("MovieId", movie)
+            }
+            val movieDetailFragment = MovieDetailFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, movieDetailFragment.apply {
+                    arguments = bundle
+                }).addToBackStack(null).commit()
+        }, moreMovies = { movieListViewModel.moreMovies() })
+
         recyclerView.apply {
-            layoutManager = GridLayoutManager(context  , 2 )
+            layoutManager = GridLayoutManager(context, 2)
             adapter = movieAdapter
         }
 
@@ -47,11 +61,10 @@ class MovieListFragment : Fragment() {
                 is Resource.Success -> {
                     progressBar.isVisible = false
                     recyclerView.isVisible = true
-                    resource.data?. let { newMovies ->
+                    resource.data?.let { newMovies ->
                         movieAdapter.updateList(newMovies)
                         movieAdapter.notifyDataSetChanged()
                     }
-
                 }
 
                 is Resource.Loading -> {
@@ -60,13 +73,12 @@ class MovieListFragment : Fragment() {
                 }
 
                 is Resource.Error -> {
-
+                    Toast.makeText(context, resource.message, Toast.LENGTH_LONG).show()
                 }
             }
-
         }
 
-        movieListViewModel.selectCategory.observe(viewLifecycleOwner){category ->
+        movieListViewModel.selectCategory.observe(viewLifecycleOwner) { category ->
             movieListViewModel.fetchMovies()
         }
     }

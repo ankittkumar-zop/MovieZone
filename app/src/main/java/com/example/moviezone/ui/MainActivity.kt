@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.appcompat.widget.Toolbar
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -21,6 +22,9 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         installSplashScreen()
         setContentView(R.layout.activity_main)
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        actionBar?.hide()
+
         val toolbar: Toolbar = findViewById(R.id.mainToolbar)
         setSupportActionBar(toolbar)
 
@@ -62,8 +66,16 @@ class MainActivity : AppCompatActivity() {
             .addToBackStack(null).commit()
     }
 
-    companion object{
+    companion object {
         const val POPULAR = "popular"
         const val TOP_RATED = "top_rated"
+    }
+
+    fun hideToolbar() {
+        findViewById<View>(R.id.mainToolbar).visibility = View.GONE
+    }
+
+    fun showToolbar() {
+        findViewById<View>(R.id.mainToolbar).visibility = View.VISIBLE
     }
 }

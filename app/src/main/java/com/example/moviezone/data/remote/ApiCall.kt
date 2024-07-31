@@ -1,7 +1,9 @@
 package com.example.moviezone.data.remote
 
-import com.example.moviezone.data.Resource
-import com.example.moviezone.data.remote.MovieList.MovieResult
+import com.example.moviezone.data.remote.movieListt.MovieListData
+import com.example.moviezone.data.remote.movieListt.MovieResult
+import com.example.moviezone.data.remote.movieReview.MovieReviewResult
+import com.example.moviezone.data.remote.movieTrailer.MovieTrailerResult
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -13,7 +15,21 @@ interface ApiCall {
     suspend fun getMovies(
         @Path("category") category: String,
         @Query("api_key") apiKey: String,
-        @Query("page") page: Int
+        @Query("page") page: Int,
     ): Response<MovieResult>
 
+    @GET("{id}")
+    suspend fun getMovieDetails(
+        @Path("id") movieId: Int, @Query("api_key") apiKey: String
+    ): Response<MovieListData>
+
+    @GET("{id}/videos")
+    suspend fun getMovieTrailer(
+        @Path("id") movieId: Int, @Query("api_key") apiKey: String
+    ): Response<MovieTrailerResult>
+
+    @GET("{id}/reviews")
+    suspend fun getMovieReview(
+        @Path("id") movieId: Int, @Query("api_key") apiKey: String
+    ): Response<MovieReviewResult>
 }
