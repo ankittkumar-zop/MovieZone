@@ -1,6 +1,5 @@
 package com.example.moviezone.data.remote.movieReview
 
-
 import com.google.gson.annotations.SerializedName
 
 data class MovieReviewResult(

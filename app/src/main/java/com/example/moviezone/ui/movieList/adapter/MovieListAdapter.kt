@@ -20,7 +20,7 @@ class MovieListAdapter(
         private val itemPosterImageView: ImageView = itemView.findViewById(R.id.ivMovieView)
         fun setMovie(movie: MovieListData?) {
             if (movie != null) {
-                Picasso.get().load("https://image.tmdb.org/t/p/w500${movie.posterUrl}")
+                Picasso.get().load("https://image.tmdb.org/t/p/w500${movie.posterUrl}").placeholder(R.drawable.poster_missing)
                     .into(itemPosterImageView)
             } else {
                 itemPosterImageView.setImageResource(R.drawable.poster_missing)

@@ -161,7 +161,8 @@ class MovieDetailFragment : Fragment() {
     }
 
     private fun updateDetail(detail: MovieListData) {
-        Picasso.get().load("https://image.tmdb.org/t/p/w500${detail.backgroundImage}").placeholder(R.drawable.poster_missing)
+        Picasso.get().load("https://image.tmdb.org/t/p/w500${detail.backgroundImage}")
+            .placeholder(R.drawable.poster_missing)
             .into(bgMoviePoster)
         movieTitle.text = detail.movieTitle
         movieYear.text = detail.year
