@@ -1,28 +1,27 @@
 package com.example.moviezone.repo
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import com.example.moviezone.data.Resource
 import com.example.moviezone.data.local.showMovieDetail.MovieDetailDao
 import com.example.moviezone.data.remote.ApiCall
 import com.example.moviezone.data.remote.movieListt.MovieListData
+import com.example.moviezone.data.remote.movieListt.MovieLocalData
 import com.example.moviezone.data.remote.movieReview.MovieReviewData
 import com.example.moviezone.data.remote.movieTrailer.MovieTrailerData
-import com.example.moviezone.data.remote.movieTrailer.MovieTrailerResult
 import com.example.moviezone.ui.movieList.apiKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.IOException
 import javax.inject.Inject
 
-class MovieDetailRepo @Inject constructor(private val apiCall: ApiCall, private val movieDetailDao: MovieDetailDao) {
+class MovieDetailRepo @Inject constructor(
+    private val apiCall: ApiCall, private val movieDetailDao: MovieDetailDao
+) {
 
-    fun observerDb(): LiveData<List<MovieListData>> = movieDetailDao.getAllPost()
-
-    suspend fun getDetail(movieId: Int): Resource<MovieListData?>{
+    suspend fun getDetail(movieId: Int): Resource<MovieListData?> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiCall.getMovieDetails(movieId = movieId , apiKey = apiKey)
+                val response = apiCall.getMovieDetails(movieId = movieId, apiKey = apiKey)
                 if (response.isSuccessful) {
                     Resource.Success(response.body())
 
@@ -37,12 +36,12 @@ class MovieDetailRepo @Inject constructor(private val apiCall: ApiCall, private 
         }
     }
 
-    suspend fun  getTrailer(movieId : Int ) : Resource<List<MovieTrailerData?>>{
+    suspend fun getTrailer(movieId: Int): Resource<List<MovieTrailerData?>> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiCall.getMovieTrailer(movieId = movieId , apiKey = apiKey)
+                val response = apiCall.getMovieTrailer(movieId = movieId, apiKey = apiKey)
                 if (response.isSuccessful) {
-                    Log.d("debug" , "successfull repo in api")
+                    Log.d("debug", "successfull repo in api")
 
                     Resource.Success(response.body()?.results ?: emptyList())
                 } else {
@@ -56,12 +55,12 @@ class MovieDetailRepo @Inject constructor(private val apiCall: ApiCall, private 
         }
     }
 
-    suspend fun getReview(movieId:Int ): Resource<List<MovieReviewData?>>{
+    suspend fun getReview(movieId: Int): Resource<List<MovieReviewData?>> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiCall.getMovieReview(movieId = movieId , apiKey = apiKey)
+                val response = apiCall.getMovieReview(movieId = movieId, apiKey = apiKey)
                 if (response.isSuccessful) {
-                    Log.d("debug" , "successfull repo in api")
+                    Log.d("debug", "successfull repo in api")
 
                     Resource.Success(response.body()?.results ?: emptyList())
                 } else {
@@ -75,20 +74,9 @@ class MovieDetailRepo @Inject constructor(private val apiCall: ApiCall, private 
         }
     }
 
-    suspend fun fetchData(movieId:Int ) {
-        withContext(Dispatchers.IO) {
-            val response = apiCall.getMovieDetails(movieId = movieId, apiKey = apiKey)
-            if (response.isSuccessful) {
-                response.body()?.let { movie ->
-//                    movieDetailDao.insertData(movie)
-                }
-            }
-        }
-    }
+    suspend fun toggleLike(movieId: Int) = movieDetailDao.toggle(movieId)
 
-    suspend fun toggle(movieId: Int) {
-        withContext(Dispatchers.IO) {
-            movieDetailDao.toggle(movieId = movieId )
-        }
-    }
+    suspend fun insertMovie(movieLocalData: MovieLocalData) = movieDetailDao.insertData(movieLocalData)
+
+    fun getIsFavourite(movieId: Int) = movieDetailDao.getIsFav(movieId)
 }

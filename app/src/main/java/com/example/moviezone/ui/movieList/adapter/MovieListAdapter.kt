@@ -25,9 +25,6 @@ class MovieListAdapter(
             }
 
             itemView.setOnClickListener {
-//                if (movie != null) {
-//                    onMovieClick(movie.id)
-//                }
                 movie?.id.let { id -> id?.let { it3 -> onMovieClick(it3) } }
             }
         }

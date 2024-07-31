@@ -30,7 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 const val Trailer_Url = "https://www.youtube.com/watch?v="
 
 @AndroidEntryPoint
-class MovieDetailFragment(private val movieId: Int) : Fragment() {
+class MovieDetailFragment : Fragment() {
 
     private val movieDetailViewModel: MovieDetailViewModel by viewModels()
     private lateinit var trailerAdapter: TrailerAdapter
@@ -63,10 +63,6 @@ class MovieDetailFragment(private val movieId: Int) : Fragment() {
         reviewRecyclerView = view.findViewById(R.id.review_recyclerview)
         likeButton= view.findViewById(R.id.like_button)
 
-        likeButton.setOnClickListener {
-           movieDetailViewModel.toggleLike(movieId!!)
-        }
-
         trailerAdapter = TrailerAdapter { trailerKey ->
             try {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Trailer_Url + trailerKey)))
@@ -88,14 +84,15 @@ class MovieDetailFragment(private val movieId: Int) : Fragment() {
 
         movieId?.let { id ->
             movieDetailViewModel.loadData(id)
+            movieDetailViewModel.getIsFavourited(id)
         }
 
-
-        movieDetailViewModel.movieDetails.observe(viewLifecycleOwner, Observer { detail ->
-            if (detail != null) {
-                updateDetail(detail)
+        movieDetailViewModel.movieDetails.observe(viewLifecycleOwner, Observer { movie->
+            movie?.let {
+                updateDetail(it)
             }
         })
+
 
         movieDetailViewModel.trailers.observe(viewLifecycleOwner) { trailer ->
             trailer?.let {
@@ -108,6 +105,26 @@ class MovieDetailFragment(private val movieId: Int) : Fragment() {
                 updateReview(review)
             }
         }
+
+        movieDetailViewModel.getIsFavourited(movieId ?: 0).observe(viewLifecycleOwner){ isFav->
+            updateLikeButton(isFav)
+        }
+
+        likeButton.setOnClickListener {
+            movieId.let { id->
+                movieDetailViewModel.toggleLike(id!!)
+            }
+        }
+
+    }
+
+    private fun updateLikeButton(isLiked: Boolean) {
+        likeButton.setImageDrawable(
+            ContextCompat.getDrawable(
+                requireContext(),
+                if(isLiked) R.drawable.heart_filled else R.drawable.heart_border
+            )
+        )
     }
 
     private fun updateReview(review: List<MovieReviewData?>) {
@@ -124,13 +141,5 @@ class MovieDetailFragment(private val movieId: Int) : Fragment() {
         movieTitle.text = detail.movieTitle
         movieYear.text = detail.year
         movieOverview.text = detail.overview
-
-        likeButton.setImageDrawable(
-            ContextCompat.getDrawable(
-                requireContext(),
-                if(detail.isLiked) R.drawable.heart_filled else R.drawable.heart_border
-            )
-        )
     }
-
 }

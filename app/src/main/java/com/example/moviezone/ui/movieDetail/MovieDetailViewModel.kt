@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviezone.data.Resource
 import com.example.moviezone.data.remote.movieListt.MovieListData
+import com.example.moviezone.data.remote.movieListt.MovieLocalData
 import com.example.moviezone.data.remote.movieReview.MovieReviewData
 import com.example.moviezone.data.remote.movieReview.MovieReviewResult
 import com.example.moviezone.data.remote.movieTrailer.MovieTrailerData
@@ -21,8 +22,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieDetailViewModel @Inject constructor(private val movieDetailRepo: MovieDetailRepo) :
-    ViewModel() {
+class MovieDetailViewModel @Inject constructor(private val movieDetailRepo: MovieDetailRepo) : ViewModel() {
 
     private val _movieDetails = MutableLiveData<MovieListData?>()
     val movieDetails: LiveData<MovieListData?> get() = _movieDetails
@@ -36,7 +36,6 @@ class MovieDetailViewModel @Inject constructor(private val movieDetailRepo: Movi
     private suspend fun fetchDetail(movieId: Int) {
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                movieDetailRepo.fetchData(movieId)
                 val response = movieDetailRepo.getDetail(movieId)
                 when(response){
                     is Resource.Error -> {
@@ -95,19 +94,17 @@ class MovieDetailViewModel @Inject constructor(private val movieDetailRepo: Movi
         }
     }
 
-    fun toggleLike(movieId: Int) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                movieDetailRepo.toggle(movieId)
-            }
-        }
+    fun getIsFavourited(movieId: Int) = movieDetailRepo.getIsFavourite(movieId)
+
+     fun toggleLike(movieId: Int) = viewModelScope.launch(Dispatchers.IO){
+        movieDetailRepo.toggleLike(movieId)
     }
 
-    fun loadData(movieId: Int) = viewModelScope.launch {
-        withContext(Dispatchers.IO){
+    fun loadData(movieId: Int) = viewModelScope.launch(Dispatchers.IO) {
+            movieDetailRepo.insertMovie(MovieLocalData(movieId, false))
             async { fetchDetail(movieId) }
             async { fetchTrailer(movieId) }
             async { fetchReviews(movieId) }
-        }
+
     }
 }

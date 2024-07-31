@@ -46,8 +46,9 @@ class MovieListFragment : Fragment() {
                 val bundle = Bundle().apply {
                     putInt("MovieId", movie)
                 }
+                val movieDetailFragment = MovieDetailFragment()
                 parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, MovieDetailFragment(movieId = movie).apply {
+                    .replace(R.id.fragment_container,movieDetailFragment.apply {
                         arguments = bundle
                     }).addToBackStack(null)
                     .commit()

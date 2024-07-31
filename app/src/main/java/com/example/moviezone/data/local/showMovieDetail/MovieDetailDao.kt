@@ -5,16 +5,16 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.moviezone.data.remote.movieListt.MovieListData
+import com.example.moviezone.data.remote.movieListt.MovieLocalData
 
 @Dao
 interface MovieDetailDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertData(movieListData: MovieListData)
+    @Query("SELECT isLiked FROM movie_detail WHERE id= :movieId")
+     fun getIsFav(movieId: Int) : LiveData<Boolean>
 
-    @Query("SELECT * FROM movie_detail")
-    fun getAllPost(): LiveData<List<MovieListData>>
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertData(movieLocalData: MovieLocalData)
 
     @Query(" UPDATE movie_detail SET isLiked = NOT isLiked WHERE id = :movieId;")
     suspend fun toggle(movieId: Int)
