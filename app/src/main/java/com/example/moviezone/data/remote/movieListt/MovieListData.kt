@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity
+@Entity(tableName = "movie_detail")
 data class MovieListData(
     @PrimaryKey @SerializedName("id") var id: Int,
     @SerializedName("poster_path") var posterUrl: String?,
@@ -12,6 +12,5 @@ data class MovieListData(
     @SerializedName("release_date") var year: String?,
     @SerializedName("backdrop_path") var backgroundImage: String?,
     @SerializedName("title") var movieTitle: String?,
-
     var isLiked: Boolean = false
 )

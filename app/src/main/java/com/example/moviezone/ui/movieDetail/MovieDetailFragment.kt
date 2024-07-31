@@ -1,14 +1,18 @@
 package com.example.moviezone.ui.movieDetail
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -26,7 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 const val Trailer_Url = "https://www.youtube.com/watch?v="
 
 @AndroidEntryPoint
-class MovieDetailFragment : Fragment() {
+class MovieDetailFragment(private val movieId: Int) : Fragment() {
 
     private val movieDetailViewModel: MovieDetailViewModel by viewModels()
     private lateinit var trailerAdapter: TrailerAdapter
@@ -35,6 +39,7 @@ class MovieDetailFragment : Fragment() {
     private lateinit var movieTitle: TextView
     private lateinit var movieYear: TextView
     private lateinit var movieOverview: TextView
+    private lateinit var likeButton: ImageButton
     private lateinit var trailerRecyclerView: RecyclerView
     private lateinit var reviewRecyclerView: RecyclerView
 
@@ -56,6 +61,11 @@ class MovieDetailFragment : Fragment() {
         movieOverview = view.findViewById(R.id.movie_description)
         trailerRecyclerView = view.findViewById(R.id.trailer_recyclerview)
         reviewRecyclerView = view.findViewById(R.id.review_recyclerview)
+        likeButton= view.findViewById(R.id.like_button)
+
+        likeButton.setOnClickListener {
+           movieDetailViewModel.toggleLike(movieId!!)
+        }
 
         trailerAdapter = TrailerAdapter { trailerKey ->
             try {
@@ -115,6 +125,12 @@ class MovieDetailFragment : Fragment() {
         movieYear.text = detail.year
         movieOverview.text = detail.overview
 
+        likeButton.setImageDrawable(
+            ContextCompat.getDrawable(
+                requireContext(),
+                if(detail.isLiked) R.drawable.heart_filled else R.drawable.heart_border
+            )
+        )
     }
 
 }

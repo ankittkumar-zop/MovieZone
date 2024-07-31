@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moviezone.R
 import com.example.moviezone.data.Resource
 import com.example.moviezone.ui.movieDetail.MovieDetailFragment
+import com.example.moviezone.ui.movieDetail.MovieDetailViewModel
 import com.example.moviezone.ui.movieList.adapter.MovieListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,6 +25,7 @@ const val apiKey = "78485b82b46c3312b295e2d81f160230"
 class MovieListFragment : Fragment() {
 
     private val movieListViewModel: MovieListViewModel by viewModels()
+    private val movieDetailViewModel: MovieDetailViewModel by viewModels()
     private lateinit var movieAdapter: MovieListAdapter
     private lateinit var recyclerView: RecyclerView
 
@@ -45,7 +47,7 @@ class MovieListFragment : Fragment() {
                     putInt("MovieId", movie)
                 }
                 parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, MovieDetailFragment().apply {
+                    .replace(R.id.fragment_container, MovieDetailFragment(movieId = movie).apply {
                         arguments = bundle
                     }).addToBackStack(null)
                     .commit()

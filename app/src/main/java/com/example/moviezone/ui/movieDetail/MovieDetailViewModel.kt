@@ -36,6 +36,7 @@ class MovieDetailViewModel @Inject constructor(private val movieDetailRepo: Movi
     private suspend fun fetchDetail(movieId: Int) {
         viewModelScope.launch {
             withContext(Dispatchers.IO){
+                movieDetailRepo.fetchData(movieId)
                 val response = movieDetailRepo.getDetail(movieId)
                 when(response){
                     is Resource.Error -> {
@@ -90,6 +91,14 @@ class MovieDetailViewModel @Inject constructor(private val movieDetailRepo: Movi
 
                     _reviews.postValue(response.data ?: emptyList<MovieReviewData>())
                 }
+            }
+        }
+    }
+
+    fun toggleLike(movieId: Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                movieDetailRepo.toggle(movieId)
             }
         }
     }
