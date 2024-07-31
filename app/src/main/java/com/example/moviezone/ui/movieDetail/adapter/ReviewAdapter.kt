@@ -7,22 +7,21 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviezone.R
 import com.example.moviezone.data.remote.movieReview.MovieReviewData
-import com.example.moviezone.data.remote.movieReview.MovieReviewResult
-import com.example.moviezone.data.remote.movieTrailer.MovieTrailerData
 
-class ReviewAdapter: RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
+class ReviewAdapter : RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
 
     private var reviews = listOf<MovieReviewData?>()
 
-    class ReviewViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    class ReviewViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val reviewText: TextView = view.findViewById(R.id.tvReviewContent)
-        fun bind ( review: MovieReviewData){
+        fun bind(review: MovieReviewData) {
             reviewText.text = review.content
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
-        val itemView= LayoutInflater.from(parent.context).inflate(R.layout.item_review, parent, false)
+        val itemView =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_review, parent, false)
         return ReviewViewHolder(itemView)
     }
 

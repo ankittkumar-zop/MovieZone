@@ -4,14 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.moviezone.data.remote.movieListt.MovieListData
 import com.example.moviezone.data.remote.movieListt.MovieLocalData
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 @Database(
-    entities = [MovieLocalData::class],
-    version = 3,
-    exportSchema = false
+    entities = [MovieLocalData::class], version = 3, exportSchema = false
 )
 abstract class MovieDetailDatabase : RoomDatabase() {
 

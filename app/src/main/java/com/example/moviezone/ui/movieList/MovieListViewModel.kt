@@ -68,7 +68,6 @@ class MovieListViewModel @Inject constructor(private val movieRepo: MovieListRep
         }
     }
 
-
     fun moreMovies() {
         if (!hasMorePages()) return
 

@@ -11,16 +11,18 @@ import com.squareup.picasso.Picasso
 
 class MovieListAdapter(
     private val moreMovies: () -> Unit,
-    private val onMovieClick: (Int) -> Unit) : RecyclerView.Adapter<MovieListAdapter.MovieViewHolder>() {
+    private val onMovieClick: (Int) -> Unit
+) : RecyclerView.Adapter<MovieListAdapter.MovieViewHolder>() {
     private var movies: List<MovieListData?> = listOf()
 
-    class MovieViewHolder(itemView: View,private val  onMovieClick:(Int) -> Unit) : RecyclerView.ViewHolder(itemView) {
+    class MovieViewHolder(itemView: View, private val onMovieClick: (Int) -> Unit) :
+        RecyclerView.ViewHolder(itemView) {
         private val itemPosterImageView: ImageView = itemView.findViewById(R.id.ivMovieView)
         fun setMovie(movie: MovieListData?) {
             if (movie != null) {
                 Picasso.get().load("https://image.tmdb.org/t/p/w500${movie.posterUrl}")
                     .into(itemPosterImageView)
-            }else{
+            } else {
                 itemPosterImageView.setImageResource(R.drawable.poster_missing)
             }
 

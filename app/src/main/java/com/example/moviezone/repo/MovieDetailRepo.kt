@@ -76,7 +76,8 @@ class MovieDetailRepo @Inject constructor(
 
     suspend fun toggleLike(movieId: Int) = movieDetailDao.toggle(movieId)
 
-    suspend fun insertMovie(movieLocalData: MovieLocalData) = movieDetailDao.insertData(movieLocalData)
+    suspend fun insertMovie(movieLocalData: MovieLocalData) =
+        movieDetailDao.insertData(movieLocalData)
 
     fun getIsFavourite(movieId: Int) = movieDetailDao.getIsFav(movieId)
 }
