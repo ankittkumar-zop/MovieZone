@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieListViewModel @Inject constructor(private val movieRepo: MovieListRepo) : ViewModel() {
-
+    var lastCategory = ""
     private val _movies = MutableLiveData<Resource<List<MovieListData?>>>()
     val movies: LiveData<Resource<List<MovieListData?>>> get() = _movies
 
