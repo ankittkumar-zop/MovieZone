@@ -100,4 +100,5 @@ class MovieListFragment : Fragment() {
     fun setCategory(category: String) {
         movieListViewModel.setSelectedCategory(category)
     }
+
 }

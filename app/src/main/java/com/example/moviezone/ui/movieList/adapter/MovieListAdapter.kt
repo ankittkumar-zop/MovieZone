@@ -13,6 +13,7 @@ class MovieListAdapter(
     private val moreMovies: () -> Unit,
     private val onMovieClick: (Int) -> Unit
 ) : RecyclerView.Adapter<MovieListAdapter.MovieViewHolder>() {
+
     private var movies: List<MovieListData?> = listOf()
 
     class MovieViewHolder(itemView: View, private val onMovieClick: (Int) -> Unit) :
@@ -33,8 +34,8 @@ class MovieListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
-        return MovieViewHolder(view, onMovieClick)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
+            return MovieViewHolder(view, onMovieClick)
     }
 
     override fun getItemCount(): Int {
