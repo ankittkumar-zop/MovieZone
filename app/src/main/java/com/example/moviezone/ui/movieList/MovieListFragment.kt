@@ -1,11 +1,10 @@
 package com.example.moviezone.ui.movieList
 
-import android.media.Image
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -52,7 +51,7 @@ class MovieListFragment : Fragment() {
         }, moreMovies = { movieListViewModel.moreMovies() })
 
         recyclerView.apply {
-            layoutManager = GridLayoutManager(context, 2)
+            layoutManager = GridLayoutManager(context, getSpanCount())
             adapter = movieAdapter
         }
 
@@ -79,8 +78,23 @@ class MovieListFragment : Fragment() {
         }
 
         movieListViewModel.selectCategory.observe(viewLifecycleOwner) { category ->
-            movieListViewModel.fetchMovies()
+            if (movieListViewModel.lastCategory != category) {
+                movieListViewModel.lastCategory = category
+                movieListViewModel.fetchMovies()
+
+            }
         }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        val manager: GridLayoutManager = recyclerView.layoutManager as GridLayoutManager
+        manager.spanCount =
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 4 else 2
+    }
+
+    private fun getSpanCount(): Int {
+        return if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) 4 else 2
     }
 
     fun setCategory(category: String) {

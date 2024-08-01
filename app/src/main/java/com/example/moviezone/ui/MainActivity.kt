@@ -6,6 +6,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -17,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    private val mainViewModel: MainActivityViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -26,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         actionBar?.hide()
 
         val toolbar: Toolbar = findViewById(R.id.mainToolbar)
+        toolbar.title = "Popular Movies"
         setSupportActionBar(toolbar)
 
         addMenuProvider(object : MenuProvider {
@@ -36,19 +39,26 @@ class MainActivity : AppCompatActivity() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.popular_menu_option -> {
-                        setCategory("popular")
+                        toolbar.title = "Popular Movies"
+                        mainViewModel.selectedCategory = POPULAR
+                        setCategory(POPULAR)
                         true
                     }
 
                     R.id.top_rated_menu_option -> {
-                        setCategory("top_rated")
+                        toolbar.title = "Top Rated Movies"
+                        mainViewModel.selectedCategory = TOP_RATED
+                        setCategory(TOP_RATED)
                         true
                     }
+
                     else -> false
                 }
             }
         })
-        loadFragment(MovieListFragment())
+        if (savedInstanceState == null) {
+            loadFragment(MovieListFragment())
+        }
     }
 
     private fun setCategory(category: String) {
