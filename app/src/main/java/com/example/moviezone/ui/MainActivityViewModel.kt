@@ -7,5 +7,5 @@ import javax.inject.Inject
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(): ViewModel() {
 
-    var selectedCategory: String = MainActivity.POPULAR
+    var selectedCategory: String = "Popular Movies"
 }

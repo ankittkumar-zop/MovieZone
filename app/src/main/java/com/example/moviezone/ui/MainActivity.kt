@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         actionBar?.hide()
 
         val toolbar: Toolbar = findViewById(R.id.mainToolbar)
-        toolbar.title = "Popular Movies"
+        toolbar.title = mainViewModel.selectedCategory
         setSupportActionBar(toolbar)
 
         addMenuProvider(object : MenuProvider {
@@ -40,14 +40,14 @@ class MainActivity : AppCompatActivity() {
                 return when (menuItem.itemId) {
                     R.id.popular_menu_option -> {
                         toolbar.title = "Popular Movies"
-                        mainViewModel.selectedCategory = POPULAR
+                        mainViewModel.selectedCategory = "Popular Movies"
                         setCategory(POPULAR)
                         true
                     }
 
                     R.id.top_rated_menu_option -> {
                         toolbar.title = "Top Rated Movies"
-                        mainViewModel.selectedCategory = TOP_RATED
+                        mainViewModel.selectedCategory = "Top Rated Movies"
                         setCategory(TOP_RATED)
                         true
                     }
